@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8516753947570123406
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8516753947570123404}
+  - component: {fileID: 8516753947570123407}
+  - component: {fileID: 8516753947570123405}
+  m_Layer: 0
+  m_Name: GameController
+  m_TagString: GameController
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8516753947570123404
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8516753947570123406}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.5676289, y: 0.031318665, z: 2.0305333}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8516753947570123407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8516753947570123406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d2c018ea7b87d142b60a5f99da8c749, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Tile_Prefab: {fileID: 8337555070100736004, guid: 2b801a1279ff20d408d9d9d4b2012a20,
+    type: 3}
+  Chunk_Prefab: {fileID: 8443397625975697760, guid: 9d83ad1eded43f340888ccaa4af0dad6,
+    type: 3}
+  Chunk_Width: 40
+  Chunk_Height: 40
+  Chunk_Count: 4
+  Noise_Freqancy: 0.15
+--- !u!114 &8516753947570123405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8516753947570123406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62ec687008aed314aaead05de7aa6ad4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Current_Water_Total: 0
+  Current_Stone_Total: 10
+  Current_Power_Total: 0
+  Water_Text: {fileID: 8475956726558269312, guid: 633e1b1fc7230f64d8f4b614dc303e62,
+    type: 3}
+  Stone_Text: {fileID: 8825380269951260769, guid: 8257a023647027d4c8f66033dcef6432,
+    type: 3}
+  Power_Text: {fileID: 5739823922911358333, guid: 9704312c82009814a9a27c7272fbdc46,
+    type: 3}
+  Prices_Text: {fileID: 1249711396993922278, guid: 63d7e8ba4601f794fa634bb4987089f1,
+    type: 3}
+  Basic_Tower_Price_Int: 0
+  Pump_Price_Int: 0
+  Drill_Price_Int: 0
