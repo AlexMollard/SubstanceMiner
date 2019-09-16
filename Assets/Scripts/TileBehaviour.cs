@@ -7,7 +7,7 @@ using UnityEditor;
 public class TileBehaviour : MonoBehaviour
 {
     // TileType
-    public enum Type {Grass,Dirt,Stone,Water,Sand};
+    public enum Type {Grass,Dirt,Stone,Water,Sand,DarkGrass};
 	public Type TileType = Type.Grass;
 
     // Tile Renderer
@@ -106,6 +106,8 @@ public class TileBehaviour : MonoBehaviour
     public void SetTileType(float mapHeight)
 	{
         mapHeight *= 2;
+        transform.localScale = new Vector3(1.0f, mapHeight , 1.0f);
+        transform.localPosition = new Vector3(transform.localPosition.x, transform.localScale.y / 2, transform.localPosition.z);
 
 		if (mapHeight < 0.2)
 		{
@@ -113,9 +115,8 @@ public class TileBehaviour : MonoBehaviour
         
 			canHaveTower = false;
 
-            //SetUVs test = new SetUVs();
-            //GetComponent<MeshFilter>().mesh.uv = test.SetAllUvs(GetComponent<MeshFilter>(), 4, 4);
-
+            transform.localScale = new Vector3(1.0f, 0.2f, 1.0f);
+            transform.localPosition = new Vector3(transform.localPosition.x, transform.localScale.y / 2, transform.localPosition.z);
         }
         else if(mapHeight < 0.5)
         {
@@ -123,31 +124,20 @@ public class TileBehaviour : MonoBehaviour
 
             canHaveTower = false;
 
-           // SetUVs test = new SetUVs();
-           // GetComponent<MeshFilter>().mesh.uv = test.SetAllUvs(GetComponent<MeshFilter>(), 0, 4);
-
+        }
+        else if (mapHeight < 0.7)
+        {
+            TileType = Type.DarkGrass;
+        
+            canHaveTower = false;
+       
         }
         else
         {
         	TileType = Type.Stone;
         
         	canHaveTower = false;
-
-           //SetUVs test = new SetUVs();
-           //GetComponent<MeshFilter>().mesh.uv = test.SetAllUvs(GetComponent<MeshFilter>(), 0, 0);
         }
-        //else if (mapHeight < 0.2)
-        //{
-        //    TileType = Type.Water;
-        //
-        //    canHaveTower = false;
-        //
-        //	rend.material = LightWater;
-        //
-        //	Vector3 newScale = new Vector3(1.0f, 0.9f * 0.7f, 1.0f);
-        //    transform.localScale = newScale;
-        //    transform.position += new Vector3(0.0f, newScale.y * 0.5f, 0.0f);
-        //}
         //else if (mapHeight < 0.25)
         //{
         //	TileType = Type.Sand;

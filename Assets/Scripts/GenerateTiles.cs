@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,16 +12,18 @@ public class GenerateTiles : MonoBehaviour
 	public GameObject Tile_Prefab;
     public GameObject Chunk_Prefab;
     public Material Textures_Material;
+    public float Amplitude = 2;
 
-	TileBehaviour[,] Tile_Behaviour;
-	TowerBehaviour[,] Tile_Tower_Behaviour;
-    GameObject[,] Generate_Water_Chunks;
-    GameObject[,] Generate_Grass_Chunks;
-    GameObject[,] Generate_Stone_Chunks;
+    public Material Mat_Water;
+    public Material Mat_Grass;
+    public Material Mat_Stone;
+    int Tile_Count = 6;
+
+    GameObject[,] New_Generated_Chunk;
+    MeshFilter[][] Tile_Mesh_List;
+    int[] Mesh_Count;
+
     GameObject[,] Tile_Object;
-
-    Vector2[,][] Old_Tile_Mesh_UVs;
-
 
 	public int Chunk_Width = 40;
 	public int Chunk_Height = 40;
@@ -35,145 +38,79 @@ public class GenerateTiles : MonoBehaviour
         Noise_Value = new float[Chunk_Width, Chunk_Height];
         Random_Int_For_Noise = UnityEngine.Random.value;
 
-        Generate_Water_Chunks = new GameObject[Chunk_Count,Chunk_Count];
-        Generate_Grass_Chunks = new GameObject[Chunk_Count,Chunk_Count];
-        Generate_Stone_Chunks = new GameObject[Chunk_Count,Chunk_Count];
+        New_Generated_Chunk = new GameObject[Chunk_Count,Chunk_Count];
+        Mesh_Count = new int[Tile_Count];
+
 
         for (int Chunk_XPos = 0; Chunk_XPos < Chunk_Count; ++Chunk_XPos)
         {
             for (int Chunk_YPos = 0; Chunk_YPos < Chunk_Count; ++Chunk_YPos)
             {
-                int Current_Water_Mesh = 0;
-                int Current_Grass_Mesh = 0;
-                int Current_Stone_Mesh = 0;
 
-                Generate_Water_Chunks[Chunk_XPos,Chunk_YPos] = Instantiate(Chunk_Prefab, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
-                Generate_Grass_Chunks[Chunk_XPos,Chunk_YPos] = Instantiate(Chunk_Prefab, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
-                Generate_Stone_Chunks[Chunk_XPos,Chunk_YPos] = Instantiate(Chunk_Prefab, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
-
+                New_Generated_Chunk[Chunk_XPos,Chunk_YPos] = Instantiate(Chunk_Prefab, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
 
                 Tile_Object = new GameObject[Chunk_Width, Chunk_Height];
-                Tile_Behaviour = new TileBehaviour[Chunk_Width, Chunk_Height];
 
-                MeshFilter[] Water_Meshes = new MeshFilter[Chunk_Width * Chunk_Height];
-                MeshFilter[] Grass_Meshes = new MeshFilter[Chunk_Width * Chunk_Height];
-                MeshFilter[] Stone_Meshes = new MeshFilter[Chunk_Width * Chunk_Height];
+                MeshFilter[][] Chunk_Meshes = new MeshFilter[Tile_Count][];
+                for (int i = 0; i < Tile_Count; i++)
+                {
+                    Chunk_Meshes[i] = new MeshFilter[Chunk_Width * Chunk_Height];
+                }
 
 
-                CombineInstance[] New_Water_Chunk_Mesh = new CombineInstance[Water_Meshes.Length];
-                CombineInstance[] New_Grass_Chunk_Mesh = new CombineInstance[Grass_Meshes.Length];
-                CombineInstance[] New_Stone_Chunk_Mesh = new CombineInstance[Stone_Meshes.Length];
+                CombineInstance[][] New_Chunk_Combine_Mesh = new CombineInstance[Tile_Count][];
+                for (int i = 0; i < Tile_Count; i++)
+                {
+                    New_Chunk_Combine_Mesh[i] = new CombineInstance[Chunk_Width * Chunk_Height];
+                }
 
+                Tile_Mesh_List = new MeshFilter[Tile_Count][];
+                for (int i = 0; i < Tile_Count; i++)
+                {
+                    Tile_Mesh_List[i] = new MeshFilter[Chunk_Width * Chunk_Height];
+                }
 
                 for (int x = 0; x < Chunk_Width; x++)
                 {
                     for (int y = 0; y < Chunk_Height; y++)
                     {
-                        Tile_Object[x, y] = Instantiate(Tile_Prefab, new Vector3(Chunk_XPos * Chunk_Width + x, Noise(Chunk_XPos,Chunk_YPos)[x,y] / 2, Chunk_YPos * Chunk_Height + y), new Quaternion(0, 0, 0, 0));
-                        Vector3 newScale = new Vector3(1.0f, Noise(Chunk_XPos, Chunk_YPos)[x, y] + 1, 1.0f);
-                        Tile_Object[x, y].transform.localScale = newScale;
-
+                        Tile_Object[x, y] = Instantiate(Tile_Prefab, new Vector3(Chunk_XPos * Chunk_Width + x, 0.0f, Chunk_YPos * Chunk_Height + y), new Quaternion(0, 0, 0, 0));
+                        Tile_Object[x, y].name = "Tile " + x + ", " + y;
                         MeshFilter meshFilter = Tile_Object[x, y].GetComponent<MeshFilter>();
 
-                        Tile_Object[x, y].GetComponent<TileBehaviour>().SetTileType(Noise(Chunk_XPos, Chunk_YPos)[x, y] /2);
+                        Tile_Object[x, y].GetComponent<TileBehaviour>().SetTileType((Noise(Chunk_XPos, Chunk_YPos)[x, y]));
 
-                        if (Tile_Object[x, y].GetComponent<TileBehaviour>().TileType == TileBehaviour.Type.Water)
-                        {
-                            Water_Meshes[Current_Water_Mesh] = meshFilter;
-                            Current_Water_Mesh++;
-                        }
-                        else if (Tile_Object[x, y].GetComponent<TileBehaviour>().TileType == TileBehaviour.Type.Grass)
-                        {
-                            Grass_Meshes[Current_Grass_Mesh] = meshFilter;
-                            Current_Grass_Mesh++;
-                        }
-                        else if (Tile_Object[x, y].GetComponent<TileBehaviour>().TileType == TileBehaviour.Type.Stone)
-                        {
-                            Stone_Meshes[Current_Stone_Mesh] = meshFilter;
-                            Current_Stone_Mesh++;
-                        }
+                        int tileType = (int)Tile_Object[x, y].GetComponent<TileBehaviour>().TileType;
+                        Tile_Mesh_List[tileType][Mesh_Count[tileType]] = meshFilter;
+                        Mesh_Count[tileType]++;
 
                         Tile_Object[x, y].GetComponent<MeshRenderer>().enabled = false;
                     }
                 }
 
-                if (Water_Meshes[0] != null)
+                for (int c = 0; c < Tile_Count; c++)
                 {
 
-
-                    int W = 0;
-                    while (W < Current_Water_Mesh)
+                    int i = 0;
+                    while (i < Mesh_Count[c])
                     {
-                        if (Water_Meshes[W])
-                        {
-                            New_Water_Chunk_Mesh[W].mesh = Water_Meshes[W].sharedMesh;
-                            New_Water_Chunk_Mesh[W].transform = Water_Meshes[W].transform.localToWorldMatrix;
-                        }
 
-                        W++;
-                    }
+                        New_Chunk_Combine_Mesh[c][i].mesh = Tile_Mesh_List[c][i].sharedMesh;
+                        New_Chunk_Combine_Mesh[c][i].transform = Tile_Mesh_List[c][i].transform.localToWorldMatrix;
 
-
-                    //create new object for each chunk
-                    Generate_Water_Chunks[Chunk_XPos, Chunk_YPos].transform.GetComponent<MeshFilter>().mesh = new Mesh();
-                    Generate_Water_Chunks[Chunk_XPos, Chunk_YPos].transform.GetComponent<MeshFilter>().mesh.CombineMeshes(New_Water_Chunk_Mesh);
-                    Generate_Water_Chunks[Chunk_XPos, Chunk_YPos].GetComponent<Renderer>().material = Textures_Material;
-                    Generate_Water_Chunks[Chunk_XPos, Chunk_YPos].transform.gameObject.SetActive(true);
-                    Generate_Water_Chunks[Chunk_XPos, Chunk_YPos].name = "Water Chunk";
-
-                }
-
-                if (Grass_Meshes[0] != null)
-                {
-
-                    int G = 0;
-                    while (G < Current_Grass_Mesh)
-                    {
-                        if (Grass_Meshes[G])
-                        {
-                            New_Grass_Chunk_Mesh[G].mesh = Grass_Meshes[G].sharedMesh;
-                            New_Grass_Chunk_Mesh[G].transform = Grass_Meshes[G].transform.localToWorldMatrix;
-                        }
-
-                        G++;
+                        i++;
                     }
 
                     //create new object for each chunk
-                    Generate_Grass_Chunks[Chunk_XPos, Chunk_YPos].transform.GetComponent<MeshFilter>().mesh = new Mesh();
-                    Generate_Grass_Chunks[Chunk_XPos, Chunk_YPos].transform.GetComponent<MeshFilter>().mesh.CombineMeshes(New_Grass_Chunk_Mesh);
-                    Generate_Grass_Chunks[Chunk_XPos, Chunk_YPos].GetComponent<Renderer>().material = Textures_Material;
-                    Generate_Grass_Chunks[Chunk_XPos, Chunk_YPos].transform.gameObject.SetActive(true);
-                    Generate_Grass_Chunks[Chunk_XPos, Chunk_YPos].name = "Grass Chunk";
+                    New_Generated_Chunk[Chunk_XPos, Chunk_YPos].transform.GetComponent<MeshFilter>().mesh = new Mesh();
+                    New_Generated_Chunk[Chunk_XPos, Chunk_YPos].transform.GetComponent<MeshFilter>().mesh.CombineMeshes(New_Chunk_Combine_Mesh[c]);
+                    New_Generated_Chunk[Chunk_XPos, Chunk_YPos].GetComponent<Renderer>().material = Mat_Water;
+                    New_Generated_Chunk[Chunk_XPos, Chunk_YPos].transform.gameObject.SetActive(true);
+                    New_Generated_Chunk[Chunk_XPos, Chunk_YPos].name = "New Chunk";
                 }
-
-                if (Stone_Meshes[0] != null)
-                {
-
-                    int S = 0;
-                    while (S < Current_Stone_Mesh)
-                    {
-                        if (Stone_Meshes[S])
-                        {
-                            New_Stone_Chunk_Mesh[S].mesh = Stone_Meshes[S].sharedMesh;
-                            New_Stone_Chunk_Mesh[S].transform = Stone_Meshes[S].transform.localToWorldMatrix;
-                        }
-
-                        S++;
-                    }
-
-
-                    //create new object for each chunk
-                    Generate_Stone_Chunks[Chunk_XPos, Chunk_YPos].transform.GetComponent<MeshFilter>().mesh = new Mesh();
-                    Generate_Stone_Chunks[Chunk_XPos, Chunk_YPos].transform.GetComponent<MeshFilter>().mesh.CombineMeshes(New_Stone_Chunk_Mesh);
-                    Generate_Stone_Chunks[Chunk_XPos, Chunk_YPos].GetComponent<Renderer>().material = Textures_Material;
-                    Generate_Stone_Chunks[Chunk_XPos, Chunk_YPos].transform.gameObject.SetActive(true);
-                    Generate_Stone_Chunks[Chunk_XPos, Chunk_YPos].name = "Stone Chunk";
-                }
-
             }
         }
     }
-
 
 
     public float[,] Noise(int Chunk_XPos,int Chunk_YPos)
@@ -185,7 +122,7 @@ public class GenerateTiles : MonoBehaviour
         {
             for (int x = 0; x < Chunk_Width; x++)
             {
-                Generated_Noise[x, y] = Mathf.PerlinNoise((x + (Chunk_XPos * Chunk_Width)) * Noise_Freqancy, (y + (Chunk_YPos * Chunk_Height)) * Noise_Freqancy);
+                Generated_Noise[x, y] = (Mathf.PerlinNoise((x + (Chunk_XPos * Chunk_Width)) * Noise_Freqancy, (y + (Chunk_YPos * Chunk_Height)) * Noise_Freqancy) / 2);
             }
         }
 

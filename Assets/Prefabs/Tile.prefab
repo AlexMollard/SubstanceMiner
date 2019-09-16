@@ -109,6 +109,9 @@ MonoBehaviour:
   TileType: 0
   rend: {fileID: 8337555070100736002}
   Texture_Material: {fileID: 2100000, guid: 2e9f67838d1437941adcb049ade6830a, type: 2}
+  Mat_Water: {fileID: 2100000, guid: 3b0c0193423382243b37e96a66a07cd4, type: 2}
+  Mat_Grass: {fileID: 2100000, guid: 17b7c96dc2cf00a429050d1c1819eb49, type: 2}
+  Mat_Stone: {fileID: 2100000, guid: 1af76bd327c752341a245f53a3767e1c, type: 2}
   oldMeshUVs: []
   Controller: {fileID: 8516753947570123406, guid: 62be4c9321986ae4c8f1b1027a464105,
     type: 3}
@@ -122,7 +125,6 @@ MonoBehaviour:
   PosY: 0
   gridWidth: 0
   gridHeight: 0
-  Set_UVs: {fileID: 0}
 --- !u!114 &4548843607968137350
 MonoBehaviour:
   m_ObjectHideFlags: 0
