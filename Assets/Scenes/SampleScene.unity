@@ -1062,6 +1062,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8516753947570123407, guid: 62be4c9321986ae4c8f1b1027a464105,
         type: 3}
+      propertyPath: Tile_Materials.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8516753947570123407, guid: 62be4c9321986ae4c8f1b1027a464105,
+        type: 3}
       propertyPath: MapWidth
       value: 40
       objectReference: {fileID: 0}
@@ -1158,6 +1163,21 @@ PrefabInstance:
     - target: {fileID: 8516753947570123407, guid: 62be4c9321986ae4c8f1b1027a464105,
         type: 3}
       propertyPath: Mat_Stone
+      value: 
+      objectReference: {fileID: 2100000, guid: 1af76bd327c752341a245f53a3767e1c, type: 2}
+    - target: {fileID: 8516753947570123407, guid: 62be4c9321986ae4c8f1b1027a464105,
+        type: 3}
+      propertyPath: Tile_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3b0c0193423382243b37e96a66a07cd4, type: 2}
+    - target: {fileID: 8516753947570123407, guid: 62be4c9321986ae4c8f1b1027a464105,
+        type: 3}
+      propertyPath: Tile_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 17b7c96dc2cf00a429050d1c1819eb49, type: 2}
+    - target: {fileID: 8516753947570123407, guid: 62be4c9321986ae4c8f1b1027a464105,
+        type: 3}
+      propertyPath: Tile_Materials.Array.data[2]
       value: 
       objectReference: {fileID: 2100000, guid: 1af76bd327c752341a245f53a3767e1c, type: 2}
     - target: {fileID: 8516753947570123405, guid: 62be4c9321986ae4c8f1b1027a464105,
