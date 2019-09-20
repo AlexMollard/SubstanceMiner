@@ -7,7 +7,7 @@ using UnityEditor;
 public class TileBehaviour : MonoBehaviour
 {
     // TileType
-    public enum Type {Grass,Dirt,Stone,Water,Sand,DarkGrass};
+    public enum Type { Water, LightWater, Sand, Dirt, Grass, LightGrass, Stone, LightStone };
 	public Type TileType = Type.Grass;
 
     // Tile Renderer
@@ -109,7 +109,7 @@ public class TileBehaviour : MonoBehaviour
         transform.localScale = new Vector3(1.0f, mapHeight , 1.0f);
         transform.localPosition = new Vector3(transform.localPosition.x, transform.localScale.y / 2, transform.localPosition.z);
 
-		if (mapHeight < 0.2)
+		if (mapHeight < 0.1)
 		{
 			TileType = Type.Water;
         
@@ -118,25 +118,54 @@ public class TileBehaviour : MonoBehaviour
             transform.localScale = new Vector3(1.0f, 0.2f, 1.0f);
             transform.localPosition = new Vector3(transform.localPosition.x, transform.localScale.y / 2, transform.localPosition.z);
         }
+        else if (mapHeight < 0.2)
+        {
+            TileType = Type.LightWater;
+
+            canHaveTower = false;
+
+            transform.localScale = new Vector3(1.0f, 0.2f, 1.0f);
+            transform.localPosition = new Vector3(transform.localPosition.x, transform.localScale.y / 2, transform.localPosition.z);
+        }
+        else if (mapHeight < 0.3)
+        {
+            TileType = Type.Sand;
+
+            canHaveTower = true;
+
+        }
+        else if (mapHeight < 0.4)
+        {
+            TileType = Type.Dirt;
+
+            canHaveTower = true;
+
+        }
         else if(mapHeight < 0.5)
         {
             TileType = Type.Grass;
 
-            canHaveTower = false;
+            canHaveTower = true;
 
         }
         else if (mapHeight < 0.7)
         {
-            TileType = Type.DarkGrass;
+            TileType = Type.LightGrass;
         
-            canHaveTower = false;
+            canHaveTower = true;
        
         }
-        else
+        else if (mapHeight < 0.8)
         {
         	TileType = Type.Stone;
         
-        	canHaveTower = false;
+        	canHaveTower = true;
+        }
+        else if (mapHeight < 0.9)
+        {
+            TileType = Type.LightStone;
+
+            canHaveTower = true;
         }
         //else if (mapHeight < 0.25)
         //{

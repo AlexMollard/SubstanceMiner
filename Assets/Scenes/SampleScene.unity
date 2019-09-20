@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.4384673, g: 0.48655325, b: 0.5668252, a: 1}
+  m_IndirectSpecularColor: {r: 0.4384669, g: 0.48655242, b: 0.56682444, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -245,6 +245,36 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 383181902}
   m_Mesh: {fileID: 0}
+--- !u!114 &383181904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 383181902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9841be44bb45a64bb24193099cc9116, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Tile_Prefab: {fileID: 8337555070100736004, guid: 2b801a1279ff20d408d9d9d4b2012a20,
+    type: 3}
+  Chunk_Prefab: {fileID: 8443397625975697760, guid: 9d83ad1eded43f340888ccaa4af0dad6,
+    type: 3}
+  Tile_Material:
+  - {fileID: 2100000, guid: f4d46a79abf7189459d5bc21fc2e4a76, type: 2}
+  - {fileID: 2100000, guid: 3b0c0193423382243b37e96a66a07cd4, type: 2}
+  - {fileID: 2100000, guid: 3c42d4d565e08cd46af085c9b2d1c727, type: 2}
+  - {fileID: 2100000, guid: ec182b81f19edf547b1ce375f36ebd87, type: 2}
+  - {fileID: 2100000, guid: 87fa98c68a3a20244a7d7523144fc681, type: 2}
+  - {fileID: 2100000, guid: 17b7c96dc2cf00a429050d1c1819eb49, type: 2}
+  - {fileID: 2100000, guid: c5ca6009c256e594d9893abd3df5d2cc, type: 2}
+  - {fileID: 2100000, guid: 1af76bd327c752341a245f53a3767e1c, type: 2}
+  Noise_Freqancy: 0.15
+  Random_Noise_Value: 1
+  Tile_Types: 8
+  Chunk_Size: 20
+  Chunk_Amount: 2
 --- !u!23 &383181907
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1180,6 +1210,11 @@ PrefabInstance:
       propertyPath: Tile_Materials.Array.data[2]
       value: 
       objectReference: {fileID: 2100000, guid: 1af76bd327c752341a245f53a3767e1c, type: 2}
+    - target: {fileID: 8516753947570123407, guid: 62be4c9321986ae4c8f1b1027a464105,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8516753947570123405, guid: 62be4c9321986ae4c8f1b1027a464105,
         type: 3}
       propertyPath: WaterText
@@ -1265,7 +1300,8 @@ PrefabInstance:
       propertyPath: Water_Text
       value: 
       objectReference: {fileID: 1817558884}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8516753947570123407, guid: 62be4c9321986ae4c8f1b1027a464105, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 62be4c9321986ae4c8f1b1027a464105, type: 3}
 --- !u!1001 &8825380269672226408
 PrefabInstance:

@@ -34,20 +34,14 @@ public class GenerateTiles : MonoBehaviour
 
     void Start()
     {
-
-
         Noise_Value = new float[Chunk_Width, Chunk_Height];
         Random_Int_For_Noise = UnityEngine.Random.value;
-
 
         New_Generated_Chunk = new List<List<GameObject>>();
 
         Mesh_Count = new int[Tile_Count];
 
-        for (int i = 0; i < Tile_Count; i++)
-        {
-            Mesh_Count[i] = 0;
-        }
+
 
 
         for (int Chunk_XPos = 0; Chunk_XPos < Chunk_Count; ++Chunk_XPos)
@@ -56,6 +50,12 @@ public class GenerateTiles : MonoBehaviour
             New_Generated_Chunk.Add(new List<GameObject>());
             for (int Chunk_YPos = 0; Chunk_YPos < Chunk_Count; ++Chunk_YPos)
             {
+
+                for (int i = 0; i < Tile_Count; i++)
+                {
+                    Mesh_Count[i] = 0;
+                }
+
                 New_Generated_Chunk[Chunk_XPos].Add(Instantiate(Chunk_Prefab, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0)));
 
                 Tile_Object = new GameObject[Chunk_Width, Chunk_Height];
@@ -88,10 +88,6 @@ public class GenerateTiles : MonoBehaviour
                     }
                 }
 
-
-                int[,] arrayname = new int[2,2];
-
-                arrayname[0, 1] = 1; 
 
                 for (int c = 0; c < Tile_Count; c++)
                 {
