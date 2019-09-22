@@ -31,6 +31,7 @@ public class TileBehaviour : MonoBehaviour
     public bool canHaveTower = true;
 	public int PosX;
     public int PosY;
+    public float HeightMultiplier = 2.0f;
 
     // Grid Properties
     public int gridWidth = 0;
@@ -105,8 +106,8 @@ public class TileBehaviour : MonoBehaviour
 
     public void SetTileType(float mapHeight)
 	{
-        mapHeight *= 2;
-        transform.localScale = new Vector3(1.0f, mapHeight , 1.0f);
+         
+        transform.localScale = new Vector3(1.0f, mapHeight * HeightMultiplier, 1.0f);
         transform.localPosition = new Vector3(transform.localPosition.x, transform.localScale.y / 2, transform.localPosition.z);
 
 		if (mapHeight < 0.1)
@@ -115,7 +116,7 @@ public class TileBehaviour : MonoBehaviour
         
 			canHaveTower = false;
 
-            transform.localScale = new Vector3(1.0f, 0.2f, 1.0f);
+            transform.localScale = new Vector3(1.0f, 0.2f * HeightMultiplier, 1.0f);
             transform.localPosition = new Vector3(transform.localPosition.x, transform.localScale.y / 2, transform.localPosition.z);
         }
         else if (mapHeight < 0.2)
@@ -124,7 +125,7 @@ public class TileBehaviour : MonoBehaviour
 
             canHaveTower = false;
 
-            transform.localScale = new Vector3(1.0f, 0.2f, 1.0f);
+            transform.localScale = new Vector3(1.0f, 0.2f * HeightMultiplier, 1.0f);
             transform.localPosition = new Vector3(transform.localPosition.x, transform.localScale.y / 2, transform.localPosition.z);
         }
         else if (mapHeight < 0.3)
@@ -145,6 +146,13 @@ public class TileBehaviour : MonoBehaviour
         {
             TileType = Type.Grass;
 
+            int randomTreeNum = UnityEngine.Random.Range(0,10);
+            if (randomTreeNum > 8)
+            {
+                GameObject Tree = Instantiate(TreeOBJ, new Vector3(transform.position.x, transform.position.y + 5, transform.position.z), new Quaternion(0, 0, 0, 0));
+                hasTower = true;
+            }
+
             canHaveTower = true;
 
         }
@@ -158,13 +166,15 @@ public class TileBehaviour : MonoBehaviour
         else if (mapHeight < 0.8)
         {
         	TileType = Type.Stone;
-        
-        	canHaveTower = true;
+            transform.localScale = new Vector3(1.0f, mapHeight * HeightMultiplier * 1.25f, 1.0f);
+            transform.localPosition = new Vector3(transform.localPosition.x, transform.localScale.y / 2, transform.localPosition.z);
+            canHaveTower = true;
         }
         else if (mapHeight < 0.9)
         {
             TileType = Type.LightStone;
-
+            transform.localScale = new Vector3(1.0f, mapHeight * HeightMultiplier * 1.25f, 1.0f);
+            transform.localPosition = new Vector3(transform.localPosition.x, transform.localScale.y / 2, transform.localPosition.z);
             canHaveTower = true;
         }
         //else if (mapHeight < 0.25)
