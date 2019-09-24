@@ -23,7 +23,7 @@ public class NewProcedualTileGen : MonoBehaviour
     // Chunk Variables
     public int Chunk_Size = 20;
     public int Chunk_Amount = 2;
-    List<List<GameObject>> New_Generated_Type_Chunk;
+    List<GameObject> New_Generated_Type_Chunk;
     int[] Mesh_Count;
 
 
@@ -33,69 +33,86 @@ public class NewProcedualTileGen : MonoBehaviour
         // Perlin Noise Variable Initialization
         Generated_Noise = new float[Chunk_Size, Chunk_Size];
         GradientSquare = GenerateSquareGradient();
-        Random_Noise_Value = Random.Range(0,99999);
+        Random_Noise_Value = Random.Range(0, 99999);
 
         Mesh_Count = new int[Tile_Types];
 
-        New_Generated_Type_Chunk = new List<List<GameObject>>();
+        New_Generated_Type_Chunk = new List<GameObject>();
         Tile_Mesh = new List<List<MeshFilter>>();
 
-        for (int Chunk_XPos = 0; Chunk_XPos < Chunk_Amount; Chunk_XPos++)
+
+
+        for (int i = 0; i < Tile_Types; i++)
         {
-            New_Generated_Type_Chunk.Add(new List<GameObject>());
-            for (int Chunk_YPos = 0; Chunk_YPos < Chunk_Amount; Chunk_YPos++)
+            Mesh_Count[i] = 0;
+        }
+
+
+        Tile_Object = new GameObject[Chunk_Size, Chunk_Size];
+
+        List<List<MeshFilter>> Chunk_Meshes = new List<List<MeshFilter>>();
+        Chunk_Meshes.Add(new List<MeshFilter>());
+
+        for (int i = 0; i < Tile_Types; i++)
+        {
+            Tile_Mesh.Add(new List<MeshFilter>());
+        }
+
+        for (int x = 0; x < Chunk_Size; x++)
+        {
+            for (int y = 0; y < Chunk_Size; y++)
             {
+                Tile_Object[x, y] = Instantiate(Tile_Prefab, new Vector3(x, 0.0f, y), new Quaternion(0, 0, 0, 0));
+                Tile_Object[x, y].name = "Tile " + x + ", " + y;
 
-                for (int i = 0; i < Tile_Types; i++)
-                {
-                    Mesh_Count[i] = 0;
-                }
+                MeshFilter Current_Tile_Mesh_Filter = Tile_Object[x, y].GetComponent<MeshFilter>();
 
+                Tile_Object[x, y].GetComponent<TileBehaviour>().SetTileType((Noise()[x, y]));
 
-                Tile_Object = new GameObject[Chunk_Size, Chunk_Size];
+                int Current_Tile_Type = (int)Tile_Object[x, y].GetComponent<TileBehaviour>().TileType;
+                Tile_Mesh[Current_Tile_Type].Add(Current_Tile_Mesh_Filter);
 
-                List<List<MeshFilter>> Chunk_Meshes = new List<List<MeshFilter>>();
-                Chunk_Meshes.Add(new List<MeshFilter>());
-
-                for (int i = 0; i < Tile_Types; i++)
-                {
-                    Tile_Mesh.Add(new List<MeshFilter>());
-                }
-
-                for (int x = 0; x < Chunk_Size; x++)
-                {
-                    for (int y = 0; y < Chunk_Size; y++)
-                    {
-                        Tile_Object[x, y] = Instantiate(Tile_Prefab, new Vector3(Chunk_XPos * Chunk_Size + x, 0.0f, Chunk_YPos * Chunk_Size + y), new Quaternion(0, 0, 0, 0));
-                        Tile_Object[x, y].name = "Tile " + x + ", " + y;
-
-                        MeshFilter Current_Tile_Mesh_Filter = Tile_Object[x, y].GetComponent<MeshFilter>();
-
-                        Tile_Object[x, y].GetComponent<TileBehaviour>().SetTileType((Noise(Chunk_XPos, Chunk_YPos)[x, y]));
-
-                        int Current_Tile_Type = (int)Tile_Object[x, y].GetComponent<TileBehaviour>().TileType;
-                        Tile_Mesh[Current_Tile_Type].Add(Current_Tile_Mesh_Filter);
-
-                        Tile_Object[x, y].GetComponent<MeshRenderer>().enabled = false;
-                    }
-                }
-
-
-                for (int Chunk_Type = 0; Chunk_Type < Tile_Types; Chunk_Type++)
-                {
-                    CombineInstance[] New_Chunk_Combine_Mesh = new CombineInstance[Tile_Mesh[Chunk_Type].Count];
-
-                    for (int i = 0; i < Tile_Mesh[Chunk_Type].Count; i++)
-                    {
-                        New_Chunk_Combine_Mesh[i].mesh = Tile_Mesh[Chunk_Type][i].sharedMesh;
-                        New_Chunk_Combine_Mesh[i].transform = Tile_Mesh[Chunk_Type][i].transform.localToWorldMatrix;
-                    }
-
-                    New_Generated_Type_Chunk[Chunk_XPos].Add(Instantiate(Chunk_Prefab, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0)));
-                    CreateNewChunk(New_Chunk_Combine_Mesh, New_Generated_Type_Chunk[Chunk_XPos][New_Generated_Type_Chunk[Chunk_XPos].Count - 1], Chunk_Type);
-                }
+                Tile_Object[x, y].GetComponent<MeshRenderer>().enabled = false;
             }
         }
+
+
+        for (int Chunk_Type = 0; Chunk_Type < Tile_Types; Chunk_Type++)
+        {
+            CombineInstance[] New_Chunk_Combine_Mesh;
+
+            if (Tile_Mesh[Chunk_Type].Count > 2000)
+            {
+               New_Chunk_Combine_Mesh = new CombineInstance[2000];
+            }
+            else
+                New_Chunk_Combine_Mesh = new CombineInstance[Tile_Mesh[Chunk_Type].Count];
+
+
+            int cubeCount = 0;
+            int currentChunk = 0;
+
+            for (int i = 0; i < Tile_Mesh[Chunk_Type].Count; i++)
+            {
+                cubeCount++;
+                New_Chunk_Combine_Mesh[i].mesh = Tile_Mesh[Chunk_Type][i].sharedMesh;
+                New_Chunk_Combine_Mesh[i].transform = Tile_Mesh[Chunk_Type][i].transform.localToWorldMatrix;
+
+                if (cubeCount >= 2000)
+                {
+                    cubeCount = 0;
+                    currentChunk++;
+                    New_Generated_Type_Chunk.Add(Instantiate(Chunk_Prefab, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0)));
+                    CreateNewChunk(New_Chunk_Combine_Mesh, New_Generated_Type_Chunk[New_Generated_Type_Chunk.Count - 1], Chunk_Type);
+
+                    New_Chunk_Combine_Mesh = new CombineInstance[Tile_Mesh[Chunk_Type].Count];
+                }
+            }
+
+            New_Generated_Type_Chunk.Add(Instantiate(Chunk_Prefab, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0)));
+            CreateNewChunk(New_Chunk_Combine_Mesh, New_Generated_Type_Chunk[New_Generated_Type_Chunk.Count - 1], Chunk_Type);
+        }
+
     }
 
     void CreateNewChunk(CombineInstance[] new_Combine_Instance, GameObject New_Chunk, int ChunkType)
@@ -107,7 +124,7 @@ public class NewProcedualTileGen : MonoBehaviour
         New_Chunk.name = "New" + Tile_Material[ChunkType] + " Chunk";
     }
     // Generate Perlin Noise Map
-    public float[,] Noise(int Chunk_XPos, int Chunk_YPos)
+    public float[,] Noise()
     {
         float[,] Generated_Noise = new float[Chunk_Size, Chunk_Size];
 
@@ -116,7 +133,7 @@ public class NewProcedualTileGen : MonoBehaviour
         {
             for (int x = 0; x < Chunk_Size; x++)
             {
-                Generated_Noise[x, y] = (Mathf.PerlinNoise((x + (Chunk_XPos * Chunk_Size)) * Noise_Freqancy + Random_Noise_Value, (y + (Chunk_YPos * Chunk_Size)) * Noise_Freqancy + Random_Noise_Value));
+                Generated_Noise[x, y] = Mathf.PerlinNoise(x * Noise_Freqancy + Random_Noise_Value, y * Noise_Freqancy + Random_Noise_Value);
                 Generated_Noise[x, y] -= GradientSquare[x][y].grayscale;
             }
         }

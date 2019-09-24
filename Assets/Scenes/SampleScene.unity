@@ -347,7 +347,7 @@ MonoBehaviour:
   Noise_Freqancy: 0.15
   Random_Noise_Value: 1
   Tile_Types: 8
-  Chunk_Size: 50
+  Chunk_Size: 125
   Chunk_Amount: 1
 --- !u!23 &383181907
 MeshRenderer:
