@@ -147,7 +147,7 @@ public class TileBehaviour : MonoBehaviour
             TileType = Type.Grass;
 
             int randomTreeNum = UnityEngine.Random.Range(0,10);
-            if (randomTreeNum > 8)
+            if (randomTreeNum > 8 && hasTower == false)
             {
                 GameObject Tree = Instantiate(TreeOBJ, new Vector3(transform.position.x, transform.position.y + 5, transform.position.z), new Quaternion(0, 0, 0, 0));
                 hasTower = true;
