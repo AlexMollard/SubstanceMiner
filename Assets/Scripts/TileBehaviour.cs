@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -128,141 +128,56 @@ public class TileBehaviour : MonoBehaviour
             transform.localScale = new Vector3(1.0f, 0.2f * HeightMultiplier, 1.0f);
             transform.localPosition = new Vector3(transform.localPosition.x, transform.localScale.y / 2, transform.localPosition.z);
         }
-        else if (mapHeight < 0.3)
+        else if (mapHeight < 0.32)
         {
             TileType = Type.Sand;
 
             canHaveTower = true;
 
         }
-        else if (mapHeight < 0.4)
+        else if (mapHeight < 0.37)
         {
             TileType = Type.Dirt;
 
             canHaveTower = true;
 
         }
-        else if(mapHeight < 0.5)
+        else if(mapHeight < 0.55)
         {
             TileType = Type.Grass;
 
-            int randomTreeNum = UnityEngine.Random.Range(0,10);
-            if (randomTreeNum > 8 && hasTower == false)
-            {
-                GameObject Tree = Instantiate(TreeOBJ, new Vector3(transform.position.x, transform.position.y + 5, transform.position.z), new Quaternion(0, 0, 0, 0));
-                hasTower = true;
-            }
+           // int randomTreeNum = UnityEngine.Random.Range(0,10);
+           // if (randomTreeNum > 8 && hasTower == false)
+           // {
+           //     GameObject Tree = Instantiate(TreeOBJ, new Vector3(transform.position.x, transform.position.y + 5, transform.position.z), new Quaternion(0, 0, 0, 0));
+           //     Tower = Tree;
+           //     hasTower = true;
+           // }
 
             canHaveTower = true;
 
         }
-        else if (mapHeight < 0.7)
+        else if (mapHeight < 0.65)
         {
             TileType = Type.LightGrass;
         
             canHaveTower = true;
        
         }
-        else if (mapHeight < 0.8)
+        else if (mapHeight < 0.95)
         {
         	TileType = Type.Stone;
             transform.localScale = new Vector3(1.0f, mapHeight * HeightMultiplier * 1.25f, 1.0f);
             transform.localPosition = new Vector3(transform.localPosition.x, transform.localScale.y / 2, transform.localPosition.z);
             canHaveTower = true;
         }
-        else if (mapHeight < 0.9)
+        else
         {
             TileType = Type.LightStone;
             transform.localScale = new Vector3(1.0f, mapHeight * HeightMultiplier * 1.25f, 1.0f);
             transform.localPosition = new Vector3(transform.localPosition.x, transform.localScale.y / 2, transform.localPosition.z);
             canHaveTower = true;
         }
-        //else if (mapHeight < 0.25)
-        //{
-        //	TileType = Type.Sand;
-        //
-        //	canHaveTower = true;
-        //
-        //	rend.material = Sand;
-        //
-        //	Vector3 newScale = new Vector3(1.0f, 1.0f * tileHeight, 1.0f);
-        //	transform.localScale = newScale;
-        //	transform.position += new Vector3(0.0f, newScale.y * 0.5f, 0.0f);
-        //}
-        //else if (mapHeight < 0.35)
-        //{
-        //    TileType = Type.Dirt;
-        //
-        //    canHaveTower = true;
-        //
-        //	rend.material = Dirt;
-        //
-        //	Vector3 newScale = new Vector3(1.0f, 1.0f * tileHeight, 1.0f);
-        //    transform.localScale = newScale;
-        //    transform.position += new Vector3(0.0f, newScale.y * 0.5f, 0.0f);
-        //}
-        //else if (mapHeight < 0.5)
-        //{
-        //	TileType = Type.Grass;
-        //
-        //	canHaveTower = true;
-        //
-        //	rend.material = LightGrass;
-        //
-        //	Vector3 newScale = new Vector3(1.0f, 1.1f * tileHeight, 1.0f);
-        //	transform.localScale = newScale;
-        //	transform.position += new Vector3(0.0f, newScale.y * 0.5f, 0.0f);
-        //
-        //    // Trees
-        //    //
-        //    //int treeChance = UnityEngine.Random.RandomRange(0,10);
-        //    //
-        //    //if (treeChance > 8)
-        //    //{
-        //    //    GameObject Tree;
-        //    //    Tree = Instantiate(TreeOBJ, new Vector3(transform.position.x, transform.position.y + 2, transform.position.z), new Quaternion(0, 0, 0, 0));
-        //    //    Tree.GetComponent<TowerBehaviour>().towerName = "Tree";
-        //    //    Tree.GetComponent<TowerBehaviour>().PosOnGrid = new Vector2(PosX, PosY);
-        //    //    hasTower = true;
-        //    //
-        //    //}
-        //}
-        //else if (mapHeight < 0.6)
-        //{
-        //	TileType = Type.Grass;
-        //
-        //	canHaveTower = true;
-        //
-        //	rend.material = DarkGrass;
-        //
-        //	Vector3 newScale = new Vector3(1.0f, 1.1f * tileHeight, 1.0f);
-        //	transform.localScale = newScale;
-        //	transform.position += new Vector3(0.0f, newScale.y * 0.5f, 0.0f);
-        //}
-        //else if (mapHeight < 0.8)
-        //{
-        //	TileType = Type.Stone;
-        //
-        //	canHaveTower = false;
-        //
-        //	rend.material = DarkStone;
-        //
-        //	Vector3 newScale = new Vector3(1.0f, 1.4f * tileHeight, 1.0f);
-        //	transform.localScale = newScale;
-        //	transform.position += new Vector3(0.0f, newScale.y * 0.5f, 0.0f);
-        //}
-        //else
-        //{
-        //    TileType = Type.Stone;
-        //
-        //    canHaveTower = false;
-        //
-        //	rend.material = LightStone;
-        //
-        //	Vector3 newScale = new Vector3(1.0f, 1.4f * tileHeight, 1.0f);
-        //    transform.localScale = newScale;
-        //    transform.position += new Vector3(0.0f, newScale.y * 0.5f, 0.0f);
-        //}
 
     }
 

@@ -13,8 +13,6 @@ GameObject:
   - component: {fileID: 8337555070100736002}
   - component: {fileID: 8337555070100736005}
   - component: {fileID: 5956615896416022875}
-  - component: {fileID: 4548843607968137350}
-  - component: {fileID: 7347790927144302107}
   m_Layer: 0
   m_Name: Tile
   m_TagString: Untagged
@@ -109,9 +107,6 @@ MonoBehaviour:
   TileType: 0
   rend: {fileID: 8337555070100736002}
   Texture_Material: {fileID: 2100000, guid: 2e9f67838d1437941adcb049ade6830a, type: 2}
-  Mat_Water: {fileID: 2100000, guid: 3b0c0193423382243b37e96a66a07cd4, type: 2}
-  Mat_Grass: {fileID: 2100000, guid: 17b7c96dc2cf00a429050d1c1819eb49, type: 2}
-  Mat_Stone: {fileID: 2100000, guid: 1af76bd327c752341a245f53a3767e1c, type: 2}
   oldMeshUVs: []
   Controller: {fileID: 8516753947570123406, guid: 62be4c9321986ae4c8f1b1027a464105,
     type: 3}
@@ -123,35 +118,6 @@ MonoBehaviour:
   canHaveTower: 1
   PosX: 0
   PosY: 0
+  HeightMultiplier: 2
   gridWidth: 0
   gridHeight: 0
---- !u!114 &4548843607968137350
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8337555070100736004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c582739b37affb4295e7e4feba7f38b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Pixel_Size: 16
-  Tile_XPos: 1
-  Tile_YPos: 1
---- !u!114 &7347790927144302107
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8337555070100736004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c582739b37affb4295e7e4feba7f38b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Pixel_Size: 16
-  Tile_XPos: 1
-  Tile_YPos: 1

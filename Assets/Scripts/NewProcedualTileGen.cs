@@ -18,11 +18,11 @@ public class NewProcedualTileGen : MonoBehaviour
     // Tile Variables
     public int Tile_Types;
     List<List<MeshFilter>> Tile_Mesh;
+    public List<MeshFilter> Tree_Mesh;
     GameObject[,] Tile_Object;
 
     // Chunk Variables
     public int Chunk_Size = 20;
-    public int Chunk_Amount = 2;
     List<GameObject> New_Generated_Type_Chunk;
     int[] Mesh_Count;
 
@@ -38,6 +38,9 @@ public class NewProcedualTileGen : MonoBehaviour
         Mesh_Count = new int[Tile_Types];
 
         New_Generated_Type_Chunk = new List<GameObject>();
+
+        Tree_Mesh = new List<MeshFilter>();
+
         Tile_Mesh = new List<List<MeshFilter>>();
 
 
@@ -72,6 +75,12 @@ public class NewProcedualTileGen : MonoBehaviour
                 int Current_Tile_Type = (int)Tile_Object[x, y].GetComponent<TileBehaviour>().TileType;
                 Tile_Mesh[Current_Tile_Type].Add(Current_Tile_Mesh_Filter);
 
+                if (Tile_Object[x, y].GetComponent<TileBehaviour>().Tower)
+                {
+                    Tree_Mesh.Add(Tile_Object[x, y].GetComponent<TileBehaviour>().Tower.GetComponentInChildren<MeshFilter>());
+                    Tile_Object[x, y].GetComponent<TileBehaviour>().Tower.GetComponent<MeshRenderer>().enabled = false;
+                }
+
                 Tile_Object[x, y].GetComponent<MeshRenderer>().enabled = false;
             }
         }
@@ -81,9 +90,9 @@ public class NewProcedualTileGen : MonoBehaviour
         {
             CombineInstance[] New_Chunk_Combine_Mesh;
 
-            if (Tile_Mesh[Chunk_Type].Count > 2000)
+            if (Tile_Mesh[Chunk_Type].Count >= 2000)
             {
-               New_Chunk_Combine_Mesh = new CombineInstance[2000];
+                New_Chunk_Combine_Mesh = new CombineInstance[2000];
             }
             else
                 New_Chunk_Combine_Mesh = new CombineInstance[Tile_Mesh[Chunk_Type].Count];
@@ -94,34 +103,62 @@ public class NewProcedualTileGen : MonoBehaviour
 
             for (int i = 0; i < Tile_Mesh[Chunk_Type].Count; i++)
             {
+                if (!Tile_Mesh[Chunk_Type][i].sharedMesh)
+                {
+                    break;
+                }
+
+
+                New_Chunk_Combine_Mesh[cubeCount].mesh = Tile_Mesh[Chunk_Type][i].sharedMesh;
+                New_Chunk_Combine_Mesh[cubeCount].transform = Tile_Mesh[Chunk_Type][i].transform.localToWorldMatrix;
+
                 cubeCount++;
-                New_Chunk_Combine_Mesh[i].mesh = Tile_Mesh[Chunk_Type][i].sharedMesh;
-                New_Chunk_Combine_Mesh[i].transform = Tile_Mesh[Chunk_Type][i].transform.localToWorldMatrix;
 
                 if (cubeCount >= 2000)
                 {
                     cubeCount = 0;
                     currentChunk++;
+
                     New_Generated_Type_Chunk.Add(Instantiate(Chunk_Prefab, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0)));
                     CreateNewChunk(New_Chunk_Combine_Mesh, New_Generated_Type_Chunk[New_Generated_Type_Chunk.Count - 1], Chunk_Type);
 
-                    New_Chunk_Combine_Mesh = new CombineInstance[Tile_Mesh[Chunk_Type].Count];
+                    New_Chunk_Combine_Mesh = new CombineInstance[Tile_Mesh[Chunk_Type].Count - (currentChunk * 2000)];
                 }
             }
+
 
             New_Generated_Type_Chunk.Add(Instantiate(Chunk_Prefab, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0)));
             CreateNewChunk(New_Chunk_Combine_Mesh, New_Generated_Type_Chunk[New_Generated_Type_Chunk.Count - 1], Chunk_Type);
         }
 
+        // Create tree mesh
+        //CombineInstance[] New_Tree_Combine_Mesh = new CombineInstance[Tree_Mesh.Count];
+        //for (int i = 0; i < Tree_Mesh.Count; i++)
+        //{
+        //    New_Tree_Combine_Mesh[i].mesh = Tree_Mesh[i].sharedMesh;
+        //    New_Tree_Combine_Mesh[i].transform = Tree_Mesh[i].transform.localToWorldMatrix;
+        //}
+        //
+        //    New_Generated_Type_Chunk.Add(Instantiate(Chunk_Prefab, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0)));
+        //    New_Generated_Type_Chunk[New_Generated_Type_Chunk.Count - 1].transform.GetComponent<MeshFilter>().mesh = new Mesh();
+        //    New_Generated_Type_Chunk[New_Generated_Type_Chunk.Count - 1].transform.GetComponent<MeshFilter>().mesh.CombineMeshes(New_Tree_Combine_Mesh);
+        //New_Generated_Type_Chunk[New_Generated_Type_Chunk.Count - 1].GetComponent<Renderer>().material = Tile_Material[3];
+        //New_Generated_Type_Chunk[New_Generated_Type_Chunk.Count - 1].transform.gameObject.SetActive(true);
+        //New_Generated_Type_Chunk[New_Generated_Type_Chunk.Count - 1].name = "New Tree Chunk";
+
     }
 
     void CreateNewChunk(CombineInstance[] new_Combine_Instance, GameObject New_Chunk, int ChunkType)
     {
-        New_Chunk.transform.GetComponent<MeshFilter>().mesh = new Mesh();
-        New_Chunk.transform.GetComponent<MeshFilter>().mesh.CombineMeshes(new_Combine_Instance);
-        New_Chunk.GetComponent<Renderer>().material = Tile_Material[ChunkType];
-        New_Chunk.transform.gameObject.SetActive(true);
-        New_Chunk.name = "New" + Tile_Material[ChunkType] + " Chunk";
+        if (new_Combine_Instance != null)
+        {
+            Debug.Log("Creating new chunk..." + new_Combine_Instance.Length);
+            New_Chunk.transform.GetComponent<MeshFilter>().mesh = new Mesh();
+            New_Chunk.transform.GetComponent<MeshFilter>().mesh.CombineMeshes(new_Combine_Instance);
+            New_Chunk.GetComponent<Renderer>().material = Tile_Material[ChunkType];
+            New_Chunk.transform.gameObject.SetActive(true);
+            New_Chunk.name = "New" + Tile_Material[ChunkType] + " Chunk";
+        }
     }
     // Generate Perlin Noise Map
     public float[,] Noise()
@@ -134,6 +171,7 @@ public class NewProcedualTileGen : MonoBehaviour
             for (int x = 0; x < Chunk_Size; x++)
             {
                 Generated_Noise[x, y] = Mathf.PerlinNoise(x * Noise_Freqancy + Random_Noise_Value, y * Noise_Freqancy + Random_Noise_Value);
+                Generated_Noise[x, y] += 0.3f;
                 Generated_Noise[x, y] -= GradientSquare[x][y].grayscale;
             }
         }
@@ -164,10 +202,10 @@ public class NewProcedualTileGen : MonoBehaviour
 
                 float colorValue;
 
-                x = x > halfWidth ? width - x : x;
-                y = y > halfHeight ? height - y : y;
+                x = (x > halfWidth) ? (width - x) : x;
+                y = (y > halfHeight) ? (height - y) : y;
 
-                int smaller = x < y ? x : y;
+                int smaller = (x < y) ? x : y;
                 colorValue = smaller / (float)halfWidth;
 
                 colorValue = 1 - colorValue;
